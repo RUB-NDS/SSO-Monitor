@@ -18,10 +18,86 @@ jobs:
         run: docker compose up -d
 
       - name: Check service health
-        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
-        with:
-          max-retries: 12
-          retry-interval: 10
-          compose-file: "docker-compose.yml"
-          skip-exited: "false"  # unhealthy containers might exit and restart
-          skip-no-healthcheck: "true"
+        run: |
+          set -euo pipefail
+          
+          max_retries=12
+          retry_interval=10
+          compose_file="docker-compose.yml"
+          skip_exited=false          # unhealthy containers might exit and restart
+          skip_no_healthcheck=true   # skip containers that have no healthcheck configured
+          
+          echo "Starting Docker Compose health check..."
+          
+          attempt=1
+          while [ "$attempt" -le "$max_retries" ]; do
+            echo "Health check attempt ${attempt}/${max_retries}..."
+          
+            # Get all containers belonging to the compose project
+            mapfile -t containers < <(docker compose -f "${compose_file}" ps -aq)
+          
+            if [ "${#containers[@]}" -eq 0 ]; then
+              echo "No containers found for compose file '${compose_file}'."
+              exit 1
+            fi
+          
+            all_healthy=true
+            any_starting=false
+          
+            for container in "${containers[@]}"; do
+              # Optionally skip exited containers
+              if [ "${skip_exited}" = true ]; then
+                container_state=$(docker inspect -f '{{.State.Status}}' "${container}")
+                if [ "${container_state}" = "exited" ] || [ "${container_state}" = "dead" ]; then
+                  echo "Skipping exited container ${container} (state: ${container_state})."
+                  continue
+                fi
+              fi
+          
+              # Get health status; "none" if no healthcheck is defined
+              health_status=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "${container}")
+          
+              if [ "${health_status}" = "none" ] && [ "${skip_no_healthcheck}" = true ]; then
+                echo "Skipping container ${container} (no healthcheck defined)."
+                continue
+              fi
+          
+              echo "Container ${container} health status: ${health_status}"
+          
+              case "${health_status}" in
+                healthy)
+                  ;;
+                starting)
+                  all_healthy=false
+                  any_starting=true
+                  ;;
+                unhealthy)
+                  echo "Container ${container} is unhealthy."
+                  exit 1
+                  ;;
+                *)
+                  echo "Container ${container} is in unexpected health status: ${health_status}"
+                  all_healthy=false
+                  ;;
+              esac
+            done
+          
+            if [ "${all_healthy}" = true ]; then
+              echo "All relevant containers are healthy."
+              exit 0
+            fi
+          
+            if [ "$attempt" -eq "$max_retries" ]; then
+              echo "Health check did not succeed within ${max_retries} attempts."
+              exit 1
+            fi
+          
+            if [ "${any_starting}" = true ]; then
+              echo "Some containers are still starting. Retrying in ${retry_interval} seconds..."
+            else
+              echo "Some containers are not healthy yet. Retrying in ${retry_interval} seconds..."
+            fi
+          
+            attempt=$((attempt + 1))
+            sleep "${retry_interval}"
+          done
