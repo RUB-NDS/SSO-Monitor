@@ -300,7 +300,7 @@ services:
       - redis-data:/data
 
   searxng:
-    image: searxng/searxng:latest
+    image: searxng/searxng:2026.6.15-cf1410af8
     restart: unless-stopped
     networks:
       - sso-monitor-network

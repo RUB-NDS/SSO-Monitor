@@ -866,7 +866,7 @@ engines:
       wikidata_id: Q3093354
       official_api_documentation: https://gpoddernet.readthedocs.io/en/latest/api/
       use_official_api: false
-      requires_api_key: false
+      require_api_key: false
       results: JSON
 
   - name: habrahabr
@@ -1899,6 +1899,7 @@ engines:
     shortcut: mjk
     engine: xpath
     paging: true
+    language_support: true
     categories: [general, web]
     search_url: https://www.mojeek.com/search?q={query}&s={pageno}&lang={lang}&lb={lang}
     results_xpath: //ul[@class="results-standard"]/li/a[@class="ob"]
@@ -1942,7 +1943,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: ko
+    language: ko
 
   - name: rubygems
     shortcut: rbg
@@ -2033,7 +2034,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: de
+    language: de
 
   - name: seekr news
     engine: seekr
@@ -2098,7 +2099,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: fr
+    language: fr
 
   - name: wttr.in
     engine: wttr
@@ -2195,7 +2196,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: ja
+    language: ja
 
   - name: bt4g
     engine: bt4g
