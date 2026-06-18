@@ -9,15 +9,7 @@ jobs:
   healthcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
-
-      - name: Set up Docker Compose
-        uses: docker/setup-compose-action@v1
-        with:
-          version: latest # use latest version of docker compose
+      - uses: actions/checkout@v6
 
       - name: Build Docker Compose
         run: docker compose build
