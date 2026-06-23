@@ -19,6 +19,7 @@ WORKDIR /app
 
 # install python dependencies
 ADD Pipfile .
+ADD Pipfile.lock .
 RUN pipenv install
 
 # copy app

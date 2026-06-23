@@ -307,7 +307,7 @@ engines:
 
   - name: annas archive
     engine: annas_archive
-    disabled: true
+    inactive: true
     shortcut: aa
 
   # - name: annas articles
@@ -745,11 +745,6 @@ engines:
     engine: genius
     shortcut: gen
 
-  - name: gentoo
-    engine: gentoo
-    shortcut: ge
-    timeout: 10.0
-
   - name: gitlab
     engine: json_engine
     paging: true
@@ -866,7 +861,7 @@ engines:
       wikidata_id: Q3093354
       official_api_documentation: https://gpoddernet.readthedocs.io/en/latest/api/
       use_official_api: false
-      requires_api_key: false
+      require_api_key: false
       results: JSON
 
   - name: habrahabr
@@ -1307,6 +1302,7 @@ engines:
     categories: music
     piped_filter: music_songs
     timeout: 3.0
+    frontend_url: https://srv.piped.video
 
   - name: piratebay
     engine: piratebay
@@ -1315,10 +1311,6 @@ engines:
     # country
     url: https://thepiratebay.org/
     timeout: 3.0
-
-  - name: podcastindex
-    engine: podcastindex
-    shortcut: podcast
 
   # Required dependency: psychopg2
   #  - name: postgresql
@@ -1508,26 +1500,11 @@ engines:
     api_site: 'askubuntu'
     categories: [it, q&a]
 
-  - name: internetarchivescholar
-    engine: internet_archive_scholar
-    shortcut: ias
-    timeout: 5.0
-
   - name: superuser
     engine: stackexchange
     shortcut: su
     api_site: 'superuser'
     categories: [it, q&a]
-
-  - name: searchcode code
-    engine: searchcode_code
-    shortcut: scc
-    disabled: true
-
-  - name: framalibre
-    engine: framalibre
-    shortcut: frl
-    disabled: true
 
   # - name: searx
   #   engine: searx_engine
@@ -1832,7 +1809,7 @@ engines:
   - name: wikicommons.images
     engine: wikicommons
     shortcut: wc
-    categories: images
+    wc_search_type: image
     number_of_results: 10
 
   - name: wolframalpha
@@ -1899,6 +1876,7 @@ engines:
     shortcut: mjk
     engine: xpath
     paging: true
+    language_support: true
     categories: [general, web]
     search_url: https://www.mojeek.com/search?q={query}&s={pageno}&lang={lang}&lb={lang}
     results_xpath: //ul[@class="results-standard"]/li/a[@class="ob"]
@@ -1942,7 +1920,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: ko
+    language: ko
 
   - name: rubygems
     shortcut: rbg
@@ -2033,43 +2011,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: de
-
-  - name: seekr news
-    engine: seekr
-    shortcut: senews
-    categories: news
-    seekr_category: news
-    disabled: true
-
-  - name: seekr images
-    engine: seekr
-    network: seekr news
-    shortcut: seimg
-    categories: images
-    seekr_category: images
-    disabled: true
-
-  - name: seekr videos
-    engine: seekr
-    network: seekr news
-    shortcut: sevid
-    categories: videos
-    seekr_category: videos
-    disabled: true
-
-  - name: sjp.pwn
-    engine: sjp
-    shortcut: sjp
-    base_url: https://sjp.pwn.pl/
-    timeout: 5.0
-    disabled: true
-
-  - name: svgrepo
-    engine: svgrepo
-    shortcut: svg
-    timeout: 10.0
-    disabled: true
+    language: de
 
   - name: tootfinder
     engine: tootfinder
@@ -2098,17 +2040,12 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: fr
+    language: fr
 
   - name: wttr.in
     engine: wttr
     shortcut: wttr
     timeout: 9.0
-
-  - name: yummly
-    engine: yummly
-    shortcut: yum
-    disabled: true
 
   - name: brave
     engine: brave
@@ -2195,7 +2132,7 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
-      language: ja
+    language: ja
 
   - name: bt4g
     engine: bt4g
